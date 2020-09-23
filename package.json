@@ -21,6 +21,8 @@
     "typescript": "^4.0.3"
   },
   "dependencies": {
+    "@sentry/node": "^5.24.2",
+    "@sentry/tracing": "^5.24.2",
     "@typegoose/typegoose": "^7.4.1",
     "apollo-server-express": "^2.18.0",
     "argon2": "^0.27.0",
