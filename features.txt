@@ -1,0 +1,7 @@
+Typescript
+Apollo-GraphQL server with 2 entities and a few queries and mutations
+MongoDB (with TypeGoose)
+DataLoader
+JWT Authentication
+Sentry error reporting
+Custom error handling
