@@ -17,7 +17,7 @@ import { ErrorName, ErrorResponse } from './types'
 import { createUserLoader } from './utils/createUserLoader'
 import { getErrorCode } from './utils/getErrorCode'
 import { ObjectIdScalar } from './utils/objectIdScalar'
-import { TypegooseMiddleware } from './utils/typegooseMiddleware'
+import { TypegooseMiddleware } from './middleware/typegooseMiddleware'
 
 async function main() {
   await mongoose.connect(process.env.MONGO_URL, {
