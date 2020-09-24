@@ -127,12 +127,10 @@ The full folder structure of this app is explained below:
 | tsconfig.json        | Config settings for compiling server code written in TypeScript                                                 |
 | .prettierrc          | Code formatting rules for prettier                                                                              |
 
-<br>
-
 ## Authentication
 
 The project uses JWT for authentication. The server performs authentication using Bearer token format. Get the access token for the user (using the `createUser` or `login` mutation) and set the HTTP `Authorization` header as `Bearer <your-token>`. <br>
-From the GraphQL playground, you can set this header by clicking on the HTTP Headers section in the bottom and then pasting the following:
+From the GraphQL Playground, you can set this header by clicking on the HTTP Headers section in the bottom and then pasting the following:
 
 ```json
 {
@@ -213,7 +211,7 @@ mutation {
 
 Whenever you change environment variables in the project, run `yarn gen-env` to update the typescript types for them.
 
-> **Note** that the script does not take into account optional environment variables. You have to add types for them yourself. For example `SENTRY_DSN` in `env.d.ts`
+> **Note** that the script does not take into account optional environment variables. You have to add types for them yourself. See `SENTRY_DSN` in `env.d.ts` for example.
 
 ### Extending the current data model
 
