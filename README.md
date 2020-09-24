@@ -1,13 +1,13 @@
 # TypeScript GraphQL MongoDB Starter
 
-The main purpose of this repository is to show a working GraphQL API Server.
+The main purpose of this repository is to show a working GraphQL API Server with Typescript and MongoDB.
 
 # Features
 
 - MongoDB with Typegoose
-- Sentry error reporting and optional performance tracing
+- Sentry error reporting and optional performance tracking
 - JWT authentication
-- Batching and caching using dataloader
+- Query batching and caching using dataloader
 - Custom error handling and formatting in Apollo server
 
 # Table of contents:
