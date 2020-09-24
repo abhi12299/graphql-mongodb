@@ -33,7 +33,7 @@ To build and run this app locally you will need a few things:
 - Clone the repository
 
 ```
-git clone https://github.com/abhi12299/TypeScript-Mongodb-Starter.git <project_name>
+git clone https://github.com/abhi12299/graphql-mongodb.git <project_name>
 ```
 
 - Install dependencies
