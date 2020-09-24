@@ -73,6 +73,7 @@ touch .env
 cp .env.example .env
 ```
 
+Following are the environment variables: <br>
 `PORT` is the port on which the server runs.<br>
 `MONGO_URL` is the MongoDB connection string, for e.g. `MONGO_URL=mongodb://localhost/test`<br>
 `JWT_SECRET` can be any random string used to sign JWT for authentication.<br>
