@@ -16,6 +16,8 @@ import {
 import { Post, PostModel } from '../entities/Post'
 import { MyContext } from '../types'
 import { isAuth } from '../middleware/isAuth'
+import { CacheControl } from '../middleware/cacheControl'
+import { CacheScope } from 'apollo-cache-control'
 
 @InputType()
 class PaginatedPostInput {
@@ -29,15 +31,18 @@ class PaginatedPostInput {
 @ObjectType()
 class PaginatedPosts {
   @Field(() => [Post], { nullable: false })
+  @CacheControl({ maxAge: 30, scope: CacheScope.Private })
   posts: Post[]
 
   @Field()
+  @CacheControl({ maxAge: 30, scope: CacheScope.Public })
   hasMore: boolean
 }
 
 @Resolver(() => Post)
 export class PostResolver {
   @FieldResolver(() => User)
+  @CacheControl({ maxAge: 30, scope: CacheScope.Public })
   async author(
     @Root() post: Post,
     @Ctx() { userLoader }: MyContext,
@@ -61,10 +66,15 @@ export class PostResolver {
   }
 
   @Query(() => PaginatedPosts)
+  // assuming posts query had some data
+  // specific to the currently logged in user
+  // private scope will cache query for every different user
+  @CacheControl({ maxAge: 30, scope: CacheScope.Private })
   async posts(
     @Arg('opts', () => PaginatedPostInput, { nullable: false })
     { limit, cursor }: PaginatedPostInput,
   ): Promise<PaginatedPosts> {
+    console.log('in posts resolver')
     const findQuery: any = {}
     if (cursor) {
       findQuery.createdAt = {
