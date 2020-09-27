@@ -5,6 +5,8 @@ The main purpose of this repository is to show a working GraphQL API Server with
 # Features
 
 - MongoDB with Typegoose
+- Query Caching with Cache Hints and Scope
+- Redis for apollo query caching
 - Sentry error reporting and optional performance tracking
 - JWT authentication
 - Query batching and caching using dataloader
@@ -20,6 +22,7 @@ The main purpose of this repository is to show a working GraphQL API Server with
 - [Mutations](#mutations)
 - [Further development](#further-development)
   - [Generating types for environment variables](#generating-types-for-environment-variables)
+  - [Extending the current data model](#extending-the-current-data-model)
 
 # Pre-reqs
 
