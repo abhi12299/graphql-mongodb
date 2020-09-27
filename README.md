@@ -23,6 +23,7 @@ The main purpose of this repository is to show a working GraphQL API Server with
 - [Further development](#further-development)
   - [Generating types for environment variables](#generating-types-for-environment-variables)
   - [Extending the current data model](#extending-the-current-data-model)
+  - [Working with query caching](#working-with-query-caching)
 
 # Pre-reqs
 
@@ -215,11 +216,26 @@ mutation {
 
 Whenever you change environment variables in the project, run `yarn gen-env` to update the typescript types for them.
 
-> **Note** that the script does not take into account optional environment variables. You have to add types for them yourself. See `SENTRY_DSN` in `env.d.ts` for example.
+> **Note** that the script does not take into account optional environment variables. You have to add types for them yourself. See `SENTRY_DSN` in `src/env.d.ts` for example.
 
 ### Extending the current data model
 
 In Typegoose, you create new collections by creating typescript classes for them and decorating the class properties. You can read more about it [here](https://typegoose.github.io/typegoose/docs/guides/quick-start-guide)
+
+### Working with query caching
+
+Apollo queries caching is governed by cache hints that are added to the scema manually. There are 2 types of cache hints, namely `scope` and `maxAge`.
+<br>
+
+`maxAge` specifies the time in seconds to cache the query result for. As for `scope`, there are two possibe values for it -
+
+1. `PUBLIC` - used when a query result is independent of variables such as a user session. Use this to cache results that are global, for example comments on a post or user profiles.
+2. `PRIVATE` - This can be used to cache queries whose response is different for different users.
+   <br>
+
+Read more about Apollo query caching [here](https://www.apollographql.com/docs/apollo-server/performance/caching/)
+
+> **Note:** You need to provide scope for each subfield in the query for the cache control headers to be properly set. See `src/resolvers/post.ts` for an example.
 
 ## License
 
