@@ -11,6 +11,7 @@ The main purpose of this repository is to show a working GraphQL API Server with
 - JWT authentication
 - Query batching and caching using dataloader
 - Custom error handling and formatting in Apollo server
+- Simple subscriptions example with Redis backed pub-sub
 
 # Table of contents:
 
@@ -82,6 +83,8 @@ Following are the environment variables: <br>
 `MONGO_URL` is the MongoDB connection string, for e.g. `MONGO_URL=mongodb://localhost/test`<br>
 `JWT_SECRET` can be any random string used to sign JWT for authentication.<br>
 `SENTRY_DSN` is the DSN for sentry used to report errors. Get a DSN [here](https://sentry.io/)
+`REDIS_HOST` is hostname for the redis, e.g. `127.0.0.1`
+`REDIS_PORT` is port for redis, e.g. `6379`
 
 - Run the project locally for development
 

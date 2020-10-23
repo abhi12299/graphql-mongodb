@@ -139,7 +139,7 @@ async function main() {
       },
     },
     // cacheControl: true, // enable to debug cache control headers
-    cache: new RedisCache({}), // default options to redis client
+    cache: new RedisCache(redisOptions),
     context: ({ req, res }) => ({
       req,
       res,
