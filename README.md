@@ -213,6 +213,19 @@ mutation {
 }
 ```
 
+## Subscriptions
+
+```graphql
+subscription {
+  newPost {
+    title
+    author {
+      username
+    }
+  }
+}
+```
+
 # Further development
 
 ### Generating types for environment variables
