@@ -82,8 +82,8 @@ Following are the environment variables: <br>
 `PORT` is the port on which the server runs.<br>
 `MONGO_URL` is the MongoDB connection string, for e.g. `MONGO_URL=mongodb://localhost/test`<br>
 `JWT_SECRET` can be any random string used to sign JWT for authentication.<br>
-`SENTRY_DSN` is the DSN for sentry used to report errors. Get a DSN [here](https://sentry.io/)
-`REDIS_HOST` is hostname for the redis, e.g. `127.0.0.1`
+`SENTRY_DSN` is the DSN for sentry used to report errors. Get a DSN [here](https://sentry.io/)<br>
+`REDIS_HOST` is hostname for the redis, e.g. `127.0.0.1`<br>
 `REDIS_PORT` is port for redis, e.g. `6379`
 
 - Run the project locally for development
