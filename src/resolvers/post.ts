@@ -1,4 +1,4 @@
-import { User } from '../entities/User'
+import { CacheScope } from 'apollo-cache-control'
 import {
   Arg,
   Ctx,
@@ -8,16 +8,19 @@ import {
   Int,
   Mutation,
   ObjectType,
+  PubSub,
+  PubSubEngine,
   Query,
   Resolver,
   Root,
+  Subscription,
   UseMiddleware,
 } from 'type-graphql'
 import { Post, PostModel } from '../entities/Post'
-import { MyContext } from '../types'
-import { isAuth } from '../middleware/isAuth'
+import { User } from '../entities/User'
 import { CacheControl } from '../middleware/cacheControl'
-import { CacheScope } from 'apollo-cache-control'
+import { isAuth } from '../middleware/isAuth'
+import { MyContext } from '../types'
 
 @InputType()
 class PaginatedPostInput {
@@ -55,6 +58,7 @@ export class PostResolver {
   async createPost(
     @Arg('title', () => String, { nullable: false }) title: string,
     @Ctx() { req }: MyContext,
+    @PubSub() pubSub: PubSubEngine,
   ): Promise<Post> {
     const { username } = req.user!
     const p = new PostModel({
@@ -62,6 +66,7 @@ export class PostResolver {
       title,
     })
     await p.save()
+    await pubSub.publish('POST_ADDED', p.toJSON())
     return p
   }
 
@@ -112,5 +117,18 @@ export class PostResolver {
       posts: posts.slice(0, realLimit),
       hasMore,
     }
+  }
+
+  // middleware runs when subscription is triggered
+  @UseMiddleware(isAuth)
+  @Subscription(() => Post, {
+    topics: 'POST_ADDED',
+    filter: ({ context }) => {
+      // stop sending events to the client if not authenticated
+      return !context.user
+    },
+  })
+  newPost(@Root() post: Post): Post {
+    return post
   }
 }
