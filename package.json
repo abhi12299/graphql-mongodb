@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@types/express-jwt": "^0.0.42",
+    "@types/ioredis": "^4.17.6",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mongoose": "^5.7.36",
     "@types/node": "^14.11.2",
@@ -33,6 +34,8 @@
     "dataloader": "^2.0.0",
     "dotenv-safe": "^8.2.0",
     "express": "^4.17.1",
+    "graphql-redis-subscriptions": "^2.3.1",
+    "ioredis": "^4.17.3",
     "jsonwebtoken": "^8.5.1",
     "mongodb": "^3.6.2",
     "mongoose": "^5.10.6",

@@ -1,15 +1,20 @@
 import * as Sentry from '@sentry/node'
 import '@sentry/tracing'
+import { RedisCache } from 'apollo-server-cache-redis'
 import { PluginDefinition } from 'apollo-server-core'
 import { ApolloError, ApolloServer } from 'apollo-server-express'
 import { ApolloServerPlugin } from 'apollo-server-plugin-base'
 import responseCachePlugin from 'apollo-server-plugin-response-cache'
 import 'dotenv-safe/config'
 import express from 'express'
-import { GraphQLError } from 'graphql'
+import { execute, GraphQLError, subscribe } from 'graphql'
+import { RedisPubSub } from 'graphql-redis-subscriptions'
+import { createServer } from 'http'
+import Redis from 'ioredis'
 import { ObjectId } from 'mongodb'
 import mongoose from 'mongoose'
 import 'reflect-metadata'
+import { SubscriptionServer } from 'subscriptions-transport-ws'
 import { buildSchema } from 'type-graphql'
 import { __prod__ } from './constants'
 import { jwtMiddleware } from './middleware/jwtMiddleware'
@@ -21,7 +26,6 @@ import { ErrorName, ErrorResponse } from './types'
 import { createUserLoader } from './utils/createUserLoader'
 import { getErrorCode } from './utils/getErrorCode'
 import { ObjectIdScalar } from './utils/objectIdScalar'
-import { RedisCache } from 'apollo-server-cache-redis'
 
 async function main() {
   await mongoose.connect(process.env.MONGO_URL, {
@@ -40,11 +44,21 @@ async function main() {
 
   app.get('/', (_, res) => res.redirect('/graphql'))
 
+  const redisOptions: Redis.RedisOptions = {
+    host: process.env.REDIS_HOST,
+    port: +process.env.REDIS_PORT,
+    retryStrategy: (times) => Math.max(times * 100, 3000),
+  }
+
   const schema = await buildSchema({
     resolvers: [HelloResolver, UserResolver, PostResolver],
     globalMiddlewares: [TypegooseMiddleware],
     validate: false,
     scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar }], // use ObjectId scalar mapping
+    pubSub: new RedisPubSub({
+      publisher: new Redis(redisOptions),
+      subscriber: new Redis(redisOptions),
+    }),
   })
   const serverPlugins: PluginDefinition[] = [
     responseCachePlugin({
@@ -177,8 +191,35 @@ async function main() {
     // }, 99)
   }
 
-  app.listen(process.env.PORT, () => {
+  const server = createServer(app)
+
+  server.listen(+process.env.PORT, () => {
     console.log(`> http://localhost:${process.env.PORT}`)
+    new SubscriptionServer(
+      {
+        execute,
+        subscribe,
+        schema,
+        onConnect: (connectionParams: any, websocket: any) => {
+          const { upgradeReq } = websocket
+          upgradeReq.headers = connectionParams
+          jwtMiddleware(upgradeReq, {} as any, () => {})
+          // if all subscriptions require authentication
+          const { user } = upgradeReq
+          if (!user) {
+            throw new Error('no auth token')
+          }
+          return {
+            req: websocket.upgradeReq,
+            userLoader: createUserLoader(),
+          }
+        },
+      },
+      {
+        server,
+        path: '/graphql',
+      },
+    )
   })
 }
 
