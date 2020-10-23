@@ -148,6 +148,8 @@ From the GraphQL Playground, you can set this header by clicking on the HTTP Hea
 
 > You can also send the access token in query parameter as well, like so `?token=<your-token>`
 
+**Note:** All subscriptions by default require authentication. From the GraphQL playground, set the authorization header using the same format. From apollo client, you can set [connection params.](https://www.apollographql.com/docs/react/data/subscriptions/#4-authenticate-over-websocket-optional)
+
 ## Queries
 
 ```graphql
