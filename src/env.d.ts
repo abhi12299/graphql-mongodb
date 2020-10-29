@@ -4,7 +4,7 @@ declare namespace NodeJS {
     MONGO_URL: string;
     JWT_SECRET: string;
     NODE_ENV: string;
-    SENTRY_DSN: string;
+    SENTRY_DSN?: string;
     REDIS_PORT: string;
     REDIS_HOST: string;
   }
